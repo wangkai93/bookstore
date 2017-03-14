@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-3-10 14:17:41 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="cn.edu.zzia.bookstore.domain.Orderitem" table="orderitem" catalog="bookstore">
+        <id name="id" type="string">
+            <column name="id" length="40" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="order" class="cn.edu.zzia.bookstore.domain.Order" fetch="select">
+            <column name="order_id" length="40" />
+        </many-to-one>
+        <many-to-one name="book" class="cn.edu.zzia.bookstore.domain.Book" lazy="false">
+            <column name="book_id" length="40" />
+        </many-to-one>
+        <property name="quantity" type="java.lang.Integer">
+            <column name="quantity" />
+        </property>
+        <property name="price" type="java.lang.Double">
+            <column name="price" precision="22" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

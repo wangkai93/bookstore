@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-3-10 14:17:41 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+	<class name="cn.edu.zzia.bookstore.domain.Order" table="orders"
+		catalog="bookstore">
+		<id name="id" type="string">
+			<column name="id" length="40" />
+			<generator class="assigned" />
+		</id>
+		<many-to-one name="user" class="cn.edu.zzia.bookstore.domain.User"
+			lazy="false">
+			<column name="user_id" length="40" />
+		</many-to-one>
+		<property name="ordertime" type="timestamp">
+			<column name="ordertime" length="19" not-null="true" />
+		</property>
+		<property name="price" type="java.lang.Double">
+			<column name="price" precision="22" scale="0" />
+		</property>
+		<property name="state" type="java.lang.Boolean">
+			<column name="state" />
+		</property>
+		<property name="isDelete" type="java.lang.Boolean">
+			<column name="is_delete" />
+		</property>
+	</class>
+</hibernate-mapping>

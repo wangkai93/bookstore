@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-3-10 14:17:41 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+	<class name="cn.edu.zzia.bookstore.domain.User" table="user"
+		catalog="bookstore">
+		<id name="id" type="string">
+			<column name="id" length="40" />
+			<generator class="assigned" />
+		</id>
+		<property name="username" type="string">
+			<column name="username" length="40" not-null="true" unique="true" />
+		</property>
+		<property name="password" type="string">
+			<column name="password" length="40" />
+		</property>
+		<property name="cellphone" type="string">
+			<column name="cellphone" length="40" not-null="true" />
+		</property>
+		<property name="address" type="string">
+			<column name="address" length="100" not-null="true" />
+		</property>
+		<property name="email" type="string">
+			<column name="email" length="40" not-null="true" />
+		</property>
+		<property name="birthday" type="date">
+			<column name="birthday" length="10" />
+		</property>
+		<property name="nickname" type="string">
+			<column name="nickname" length="40" />
+		</property>
+		<property name="type" type="java.lang.Boolean">
+			<column name="type" />
+		</property>
+		<property name="state" type="java.lang.Integer">
+			<column name="state" />
+		</property>
+	</class>
+</hibernate-mapping>

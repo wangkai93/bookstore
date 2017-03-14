@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans    
+                        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd    
+                        http://www.springframework.org/schema/context    
+                        http://www.springframework.org/schema/context/spring-context-4.0.xsd  
+                        http://www.springframework.org/schema/aop
+                        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+                         http://www.springframework.org/schema/tx
+                        http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+	<!-- 自动扫描使用注解自动注入，但是这里只注入service和dao的，controller层的使用spring-mvc注入 -->
+	<context:component-scan base-package="cn.edu.zzia.bookstore">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	<!-- 引入init.properties中属性 -->
+	<bean id="placeholderConfig"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:init.properties</value>
+		</property>
+	</bean>
+	<!-- 配置数据源，连接池使用c3p0,详细信息参见hibernate官方文档"基础配置章节" -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<!--链接数据库所需驱动 -->
+		<property name="driverClass">
+			<value>${datasource.driverClassName}</value>
+		</property>
+		<!--链接数据库的url -->
+		<property name="jdbcUrl">
+			<value>${datasource.url}</value>
+		</property>
+		<!--链接数据库用户名 -->
+		<property name="user">
+			<value>${datasource.username}</value>
+		</property>
+		<!--链接数据库密码 -->
+		<property name="password">
+			<value>${datasource.password}</value>
+		</property>
+		<!--当连接池中的链接耗尽时c3p0一次同时获得的链接是,默认为 3 -->
+		<property name="acquireIncrement">
+			<value>${c3p0.acquireIncrement}</value>
+		</property>
+		<!--初始化时一次获得3个连接池取值在minPoolSize和maxPoolSize之间,默认为 3 -->
+		<property name="initialPoolSize">
+			<value>${c3p0.initialPoolSize}</value>
+		</property>
+		<!--连接池中保留的最小连接数,默认为 15 -->
+		<property name="minPoolSize">
+			<value>${c3p0.minPoolSize}</value>
+		</property>
+		<!--连接池中保留的最大连接数,默认为 15 -->
+		<property name="maxPoolSize">
+			<value>${c3p0.maxPoolSize}</value>
+		</property>
+		<!--最大空闲时间,60秒未使用则连接池被丢弃，若为0则永远不丢弃,默认为 0 -->
+		<property name="maxIdleTime">
+			<value>${c3p0.maxIdleTime}</value>
+		</property>
+		<!--每秒检查连接池中的空闲链接数，默认为 0 -->
+		<property name="idleConnectionTestPeriod">
+			<value>${c3p0.idleConnectionTestPeriod}</value>
+		</property>
+		<!-- JDBC的标准参数，用于控制数据源内加载的PreparedStatements的数量 但由于缓存中的Statemnts属于单个的connection而不是整个的连接池,所以设置 
+			这个参数需要考虑多方面的因素，如果maxStatements为0怎连接池被关闭，默认为 0 -->
+		<property name="maxStatements">
+			<value>${c3p0.maxStatements}</value>
+		</property>
+		<!-- c3p0为异步操作，缓存的JDBC通过帮助进程来完成,扩展这些操作有利于提高系统功能， 通过线程实行多个操作同时被执行 -->
+		<property name="numHelperThreads">
+			<value>${c3p0.numHelperThreads}</value>
+		</property>
+	</bean>
+
+	<!-- 配置Hibernate中的SessionFactory -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<!-- 引入数据源 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 配置Hibernate对应的映射资源 -->
+		<property name="mappingDirectoryLocations">
+			<list>
+				<value>classpath:cn/edu/zzia/bookstore/domain/</value>
+			</list>
+		</property>
+		<!-- 配置Hibernate的属性，包括断言(方言)，show_sql等 -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					${hibernate.dialect}
+				</prop>
+				<prop key="hibernate.jdbc.fetch_size">
+					${hibernate.jdbc.fetch_size}
+				</prop>
+				<prop key="hibernate.jdbc.batch_size">
+					${hibernate.jdbc.batch_size}
+				</prop>
+				<prop key="hibernate.connection.release_mode">
+					${hibernate.connection.release_mode}
+				</prop>
+				<prop key="hibernate.show_sql">
+					${hibernate.show_sql}
+				</prop>
+			</props>
+		</property>
+	</bean>
+	<!--事务管理 定义了一些用来让应用服务器管理事务的方法 -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!--5 配置处理事务的注解 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+</beans>
