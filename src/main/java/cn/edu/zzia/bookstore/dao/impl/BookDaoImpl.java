@@ -1,7 +1,11 @@
 package cn.edu.zzia.bookstore.dao.impl;
 
-import java.util.List;
+import java.sql.SQLException;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.stereotype.Repository;
 
 import cn.edu.zzia.bookstore.dao.IBookDao;
@@ -10,28 +14,21 @@ import cn.edu.zzia.bookstore.domain.Book;
 @Repository(IBookDao.SERVICE_NAME)
 public class BookDaoImpl extends CommonDaoImpl<Book> implements IBookDao {
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public int getTotalRecord() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public Integer getTotalRecord() {
 
-	@Override
-	public List<Book> getPageData(int startindex, int pagesize) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		final String hql = "select count(*) from Book";
 
-	@Override
-	public List<Book> getPageData(int startindex, int pagesize, String category_id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		return this.getHibernateTemplate().execute(new HibernateCallback() {
 
-	@Override
-	public int getTotalRecord(String category_id) {
-		// TODO Auto-generated method stub
-		return 0;
+			@Override
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+
+				Query query = session.createQuery(hql);
+				return ((Number)query.uniqueResult()).intValue();
+			}
+		});
 	}
 
 }

@@ -3,32 +3,41 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 2017-3-10 14:17:41 by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="cn.edu.zzia.bookstore.domain.Book" table="book" catalog="bookstore">
-        <id name="id" type="string">
-            <column name="id" length="40" />
-            <generator class="assigned" />
-        </id>
-        <many-to-one name="category" class="cn.edu.zzia.bookstore.domain.Category" lazy="false">
-            <column name="category_id" length="40" />
-        </many-to-one>
-        
-         <many-to-one name="publisher" class="cn.edu.zzia.bookstore.domain.Publisher" lazy="false">
-            <column name="publisher_id" length="40" />
-        </many-to-one>
-        <property name="name" type="string">
-            <column name="name" length="100" not-null="true" unique="true" />
-        </property>
-        <property name="author" type="string">
-            <column name="author" length="40" not-null="true" />
-        </property>
-        <property name="price" type="double">
-            <column name="price" precision="22" scale="0" not-null="true" />
-        </property>
-        <property name="image" type="string">
-            <column name="image" length="100" />
-        </property>
-        <property name="description" type="string">
-            <column name="description" />
-        </property>
-    </class>
+	<class name="cn.edu.zzia.bookstore.domain.Book" table="book"
+		catalog="bookstore">
+		<id name="id" type="string">
+			<column name="id" length="40" />
+			<generator class="assigned" />
+		</id>
+		<many-to-one name="category" class="cn.edu.zzia.bookstore.domain.Category"
+			lazy="false">
+			<column name="category_id" length="40" />
+		</many-to-one>
+
+		<many-to-one name="publisher" class="cn.edu.zzia.bookstore.domain.Publisher"
+			lazy="false">
+			<column name="publisher_id" length="40" />
+		</many-to-one>
+		<property name="name" type="string">
+			<column name="name" length="100" not-null="true" unique="true" />
+		</property>
+		<property name="author" type="string">
+			<column name="author" length="40" not-null="true" />
+		</property>
+		<property name="price" type="double">
+			<column name="price" precision="22" scale="0" not-null="true" />
+		</property>
+		<property name="image" type="string">
+			<column name="image" length="100" />
+		</property>
+		<property name="addDate" type="date">
+			<column name="add_date" length="10" />
+		</property>
+		<property name="sort" type="integer">
+			<column name="sort" />
+		</property>
+		<property name="description" type="string">
+			<column name="description" />
+		</property>
+	</class>
 </hibernate-mapping>

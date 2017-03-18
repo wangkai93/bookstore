@@ -51,4 +51,12 @@ public interface IBookService {
 	 */
 	void saveBook(Book book, String categoryId,String publisherId);
 
+	/**
+	 * 根据书的名字分页查找书籍
+	 * @param bookName
+	 * @param pagenum
+	 * @return
+	 */
+	Page findBookByName(String bookName,String pagenum);
+
 }

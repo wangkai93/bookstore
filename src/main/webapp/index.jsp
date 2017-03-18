@@ -7,9 +7,9 @@
     <title>网站首页 </title>
   </head>
   
-  <frameset rows="98,*">
-  		<frame src="${pageContext.request.contextPath}/client/index/head"  name="head">
-  		<frame src="${pageContext.request.contextPath}/client/index/getAll" name="body">
+  <frameset rows="140,*">
+  		<frame src="${pageContext.request.contextPath}/client/index/head"  name="head" frameBorder=0 noResize>
+  		<frame id="iframe" src="${pageContext.request.contextPath}/client/index/getAll" name="body" frameBorder=0 noResize>
   </frameset>
 </html>
 

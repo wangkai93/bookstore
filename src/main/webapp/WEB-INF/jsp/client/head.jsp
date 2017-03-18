@@ -8,7 +8,53 @@
 		<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
 
 <!-- 可选的Bootstrap主题文件（一般不用引入） -->
-<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap-theme.min.css"><script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+
+	function searchBook(){
+		
+		var bookName = $("#searchBook").val();
+		if($.trim(bookName) == ""){
+			return;
+		}
+		$("#iframe", window.parent.document)
+		.attr("src",
+				"${pageContext.request.contextPath}/client/index/findBook?bookName="+bookName)
+	}
+
+	function doLogin(){
+		
+		var username = $("#username").val();
+		var password = $("#password").val();
+		
+		if(username == "" || password == ""){
+			$("#loginPmt").html("用户名密码不能为空");
+			return;
+		}
+		
+		$.ajax({
+			url:"${pageContext.request.contextPath}/client/login/login",
+			type:"post",
+			data:{username:username,password:password},
+			success:function(data){
+				console.log(data);
+				if(data.code == 10002){
+					$("#loginPmt").html("用户名密码不能为空");
+				}
+				if(data.code == 10003){
+					// 刷新body页面和head页面
+					window.location.reload();//刷新当前页面.
+					$("#iframe", window.parent.document)
+					.attr("src",
+							"${pageContext.request.contextPath}/client/index/getAll")
+				}
+			},
+			error:function(e){
+				console.log(e);
+			}
+		});
+	}
+</script>
 	</head>
 
 	<body style="text-align: center">
@@ -44,20 +90,29 @@
 						target="body">订单</a>
 				</li>
 			</ul>
+			<div class="col-lg-6"style="width: 400px;">
+			    <div class="input-group">
+			      <input id="searchBook" type="text" class="form-control"  placeholder="搜索书籍">
+			      <span class="input-group-btn">
+			        <a class="btn btn-default" target="body" onclick="searchBook()">搜索</a>
+			      </span>
+			    </div><!-- /input-group -->
+		 	 </div><!-- /.col-lg-6 -->
 			<c:if test="${user==null}">
 				<form
-					action="${pageContext.request.contextPath}/client/login/login "
+					action=""
 					method="post" class="navbar-form navbar-right" role="form">
+					<span id="loginPmt" style="color: red;"></span>
 					<div class="form-group">
-						<input placeholder="用户名" name="username" class="form-control"
+						<input placeholder="用户名" name="username" id="username" class="form-control"
 							type="text">
 					</div>
 					<div class="form-group">
-						<input placeholder="密码" name="password" class="form-control"
+						<input placeholder="密码" name="password" id="password" class="form-control"
 							type="password">
 					</div>
 					<div class="btn-group">
-						<button type="submit" class="btn btn-success">
+						<button type="button" class="btn btn-success" onclick="doLogin()">
 							登陆
 						</button>
 						<button type="button" class="btn btn-success"
@@ -82,7 +137,7 @@
 						</li>
 						
 						<li>
-							<a href="#"><span class="glyphicon glyphicon-envelope"></span>&nbsp;&nbsp;消息中心</a>
+							<a href="${pageContext.request.contextPath }/client/collect/list" target="body"><span class="glyphicon glyphicon-envelope"></span>&nbsp;&nbsp;收藏夹</a>
 						</li>
 						<li class="divider"></li>
 						<li>

@@ -1,4 +1,7 @@
 package cn.edu.zzia.bookstore.domain;
+
+import java.util.Date;
+
 // Generated 2017-3-10 14:17:41 by Hibernate Tools 3.4.0.CR1
 
 /**
@@ -14,7 +17,10 @@ public class Book implements java.io.Serializable {
 	private String author;
 	private double price;
 	private String image;
+	private Date addDate;
 	private String description;
+	private Integer sort;
+	private Boolean isNew;
 
 	public Book() {
 	}
@@ -99,6 +105,30 @@ public class Book implements java.io.Serializable {
 
 	public void setPublisher(Publisher publisher) {
 		this.publisher = publisher;
+	}
+
+	public Date getAddDate() {
+		return addDate;
+	}
+
+	public void setAddDate(Date addDate) {
+		this.addDate = addDate;
+	}
+
+	public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
+	}
+
+	public Boolean getIsNew() {
+		return isNew;
+	}
+
+	public void setIsNew(Boolean isNew) {
+		this.isNew = isNew;
 	}
 
 }

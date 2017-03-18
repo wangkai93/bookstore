@@ -3,3 +3,11 @@ create table publisher(
 	publisher_name varchar(50),
 	description varchar(255)
 );
+
+create table collect(
+	user_id varchar(40),
+	book_id varchar(40),
+	primary key(user_id,book_id),
+	constraint FK_collect_user_id foreign key (user_id) references user(id),
+	constraint FK_collect_book_id foreign key (book_id) references book(id)
+);
