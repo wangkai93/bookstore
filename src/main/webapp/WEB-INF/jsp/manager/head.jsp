@@ -15,6 +15,6 @@
 		}
   </style>
  <body>
-		 	<div class="head"><img src="${pageContext.request.contextPath }/imgs/head.gif"/></div>
+		 	<div class="head"><img src="${pageContext.request.contextPath }/imgs/head.png"/></div>
 	</body>
 </html>
