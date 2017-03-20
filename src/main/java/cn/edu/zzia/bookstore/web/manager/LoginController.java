@@ -1,7 +1,10 @@
 package cn.edu.zzia.bookstore.web.manager;
 
+import java.io.IOException;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,24 @@ public class LoginController {
 
 	@Resource(name = IUserService.SERVICE_NAME)
 	private IUserService userService = null;
+	
+	
+	@RequestMapping(value = "/logout")
+	public void logout(HttpServletRequest request,HttpServletResponse response) throws IOException{
+		
+		HttpSession session = request.getSession(false);
+		if(null == session){
+			response.sendRedirect(request.getContextPath() + "/backend");
+		}
+		User user = (User) session.getAttribute("manager");
+		if(null == user){
+			response.sendRedirect(request.getContextPath() + "/backend");
+		}
+		
+		session.removeAttribute("manager");
+		session.invalidate();
+		response.sendRedirect(request.getContextPath() + "/backend");
+	}
 
 	/**
 	 * 展示后台登陆页面
@@ -56,5 +77,5 @@ public class LoginController {
 
 		return "manager/manager";
 	}
-
+	
 }

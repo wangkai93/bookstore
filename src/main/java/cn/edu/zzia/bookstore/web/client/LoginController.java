@@ -2,6 +2,7 @@ package cn.edu.zzia.bookstore.web.client;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,9 +31,23 @@ public class LoginController {
 	 * @return
 	 */
 	@RequestMapping(value = "/logout")
+	@ResponseBody
 	public String logout(HttpServletRequest request) {
-		request.getSession().invalidate();
-		return "/client/head";
+		
+		Message msg = new Message(20002,"退出成功");
+		String json = JSON.toJSONString(msg);
+		HttpSession session = request.getSession(false);
+		if(null == session){
+			return json;
+		}
+		User user = (User) session.getAttribute("user");
+		if(null == user){
+			return json;
+		}
+		
+		session.removeAttribute("user");
+		session.invalidate();
+		return json;
 	}
 	
 	/**

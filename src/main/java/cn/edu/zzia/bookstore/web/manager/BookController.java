@@ -8,6 +8,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,15 +33,16 @@ public class BookController {
 
 	@Resource(name = IBookService.SERVICE_NAME)
 	private IBookService bookService = null;
-	
+
 	@Resource(name = ICategoryService.SERVICE_NAME)
 	private ICategoryService categoryService = null;
-	
+
 	@Resource(name = IPublisherService.SERVICE_NAME)
 	private IPublisherService publisherService = null;
 
 	/**
 	 * 显示添加书籍的页面
+	 * 
 	 * @return
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
@@ -54,6 +56,7 @@ public class BookController {
 
 	/**
 	 * 保存添加的书籍
+	 * 
 	 * @param book
 	 * @param request
 	 * @return
@@ -61,7 +64,9 @@ public class BookController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public String save(Book book,@RequestParam("category_id")String categoryId ,@RequestParam("publisher_id")String publisherId ,HttpServletRequest request) throws IllegalStateException, IOException {
+	public String save(Book book, @RequestParam("category_id") String categoryId,
+			@RequestParam("publisher_id") String publisherId, HttpServletRequest request)
+			throws IllegalStateException, IOException {
 
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
 				request.getSession().getServletContext());
@@ -77,22 +82,22 @@ public class BookController {
 				// 一次遍历所有文件
 				MultipartFile file = multiRequest.getFile(iter.next().toString());
 				String filename = "images" + File.separator + System.currentTimeMillis() + "";
-				if(null != file){
+				if (null != file) {
 					// 获取扩展名
 					String originalName = file.getOriginalFilename();
 					String ext = originalName.substring(originalName.lastIndexOf("."), originalName.length());
 					filename = filename + ext;
 					File images = new File(contextPath + File.separator + filename);
 					file.transferTo(images);
-				}else{
+				} else {
 					request.setAttribute("bookError", "图片不能为空");
 					return "manager/addbook";
 				}
 				book.setId(WebUtils.makeID());
 				book.setImage(filename);
-				bookService.saveBook(book,categoryId,publisherId);
+				bookService.saveBook(book, categoryId, publisherId);
 			}
-		}else{
+		} else {
 			request.setAttribute("bookError", "图片不能为空");
 			return "manager/addbook";
 		}
@@ -121,22 +126,54 @@ public class BookController {
 	 * 
 	 * @param category
 	 * @return
+	 * @throws IOException 
+	 * @throws IllegalStateException 
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(Book book,@RequestParam("category_id")String categoryId ,@RequestParam("publisher_id")String publisherId ) {
+	public String update(Book book, @RequestParam("category_id") String categoryId,
+			@RequestParam("publisher_id") String publisherId, HttpServletRequest request) throws IllegalStateException, IOException {
+		
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
+				request.getSession().getServletContext());
 
-		bookService.updateBook(book,categoryId,publisherId);
+		String contextPath = request.getServletContext().getRealPath("/");
+		// 检查form中是否有enctype="multipart/form-data"
+		if (multipartResolver.isMultipart(request)) {
+			// 将request变成多部分request
+			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+			// 获取multiRequest 中所有的文件名
+			Iterator iter = multiRequest.getFileNames();
+			if (iter.hasNext()) {
+				// 一次遍历所有文件
+				MultipartFile file = multiRequest.getFile(iter.next().toString());
+				String filename = null;
+				if (null != file && file.getSize() > 0) {
+					// 获取扩展名
+					filename = "images" + File.separator + System.currentTimeMillis() + "";
+					String originalName = file.getOriginalFilename();
+					String ext = originalName.substring(originalName.lastIndexOf("."), originalName.length());
+					filename = filename + ext;
+					File images = new File(contextPath + File.separator + filename);
+					file.transferTo(images);
+				} 
+				if(StringUtils.isNotBlank(filename))
+					book.setImage(filename);
+				bookService.updateBook(book, categoryId, publisherId);
+			}
+		} 
+
 
 		return "redirect:/manager/book/list";
 	}
 
 	/**
 	 * 显示书籍列表
+	 * 
 	 * @param request
 	 * @return
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String list(@RequestParam(value = "pagenum", required = false) String pagenum,HttpServletRequest request) {
+	public String list(@RequestParam(value = "pagenum", required = false) String pagenum, HttpServletRequest request) {
 
 		Page page = bookService.findBooksWithPage(pagenum);
 		request.setAttribute("page", page);
@@ -145,6 +182,7 @@ public class BookController {
 
 	/**
 	 * 删除书籍信息
+	 * 
 	 * @param categoryId
 	 * @return
 	 */

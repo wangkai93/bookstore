@@ -3,12 +3,23 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>    
+  <SCRIPT src="${pageContext.request.contextPath}/js/jquery-3.1.1.min.js"></SCRIPT>
     <title>修改图书</title>	
+    <script type="text/javascript">
+    /**
+	选择图片
+	*/
+	function changeCover() {
+	
+		$("#coverFile").click();
+	}
+    </script>
   </head>  
   <body>
   
 	<form action="${pageContext.request.contextPath }/manager/book/update" method="post" enctype="multipart/form-data"> 
 		<input type="hidden" name = "id" value="${book.id }">  
+		<input type="hidden" name = "sort" value="${book.sort }">  
    	<table frame="border" width="50%">
    		<tr>
    			<td>图书名称</td>
@@ -24,7 +35,13 @@
    		</tr>
    		<tr>
    			<td>图片</td>
-   			<td><img name="image" src="${pageContext.request.contextPath }/${book.image }"></td>
+   			<td><img name="cover" onclick="changeCover()" src="${pageContext.request.contextPath }/${book.image }">
+   			<input id="image" name="image" type="hidden" value="${book.image }" />
+   			<input style="display: none"
+			id="coverFile" accept="image/png,image/gif" name="coverFile"
+			type="file" />
+   			
+   			</td>
    		</tr>
    		<tr>
    			<td>描述</td>
@@ -52,9 +69,9 @@
 				</select></td>
 			</tr>
    		<tr>
-   			<td><input type="reset" value="重置"></td>
+   			<td></td>
    			<td>
-   				<input type="submit" value="添加">
+   				<input type="submit" value="更新">
    			</td>
    		</tr>
    	

@@ -114,6 +114,7 @@ public class BookServiceImpl implements IBookService {
 				if (null != category && null != publisher) {
 					book.setCategory(category);
 					book.setPublisher(publisher);
+					book.setAddDate(new Date());
 					bookDao.update(book);
 				}
 			}

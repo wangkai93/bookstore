@@ -7,11 +7,11 @@
 	</head>
 
 	<frameset rows="98,*,8">
-			<frame src="${pageContext.request.contextPath}/manager/menu/top" name="head">
+			<frame src="${pageContext.request.contextPath}/manager/menu/top" id="top" frameBorder=0 noResize name="head">
 			
 		<frameset cols="20%,*">
-			<frame src="${pageContext.request.contextPath}/manager/menu/left" name="left">
-			<frame src="${pageContext.request.contextPath}/manager/menu/main/" name="body">
+			<frame src="${pageContext.request.contextPath}/manager/menu/left" frameBorder=0 noResize name="left">
+			<frame src="${pageContext.request.contextPath}/manager/menu/main/" frameBorder=0 noResize  name="body">
 		</frameset>
 	</frameset>
 </html>
